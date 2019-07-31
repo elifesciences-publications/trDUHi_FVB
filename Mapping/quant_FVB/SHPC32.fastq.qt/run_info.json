@@ -1,0 +1,13 @@
+{
+	"n_targets": 101612,
+	"n_bootstraps": 0,
+	"n_processed": 68052188,
+	"n_pseudoaligned": 50387909,
+	"n_unique": 19862399,
+	"p_pseudoaligned": 74.0,
+	"p_unique": 29.2,
+	"kallisto_version": "0.44.0",
+	"index_version": 10,
+	"start_time": "Wed Jun 13 17:03:37 2018",
+	"call": "kallisto quant -i /scratch/mvilcot//FVB.index --single -t 16 -l 200 -s 20 -o /scratch/mvilcot/quant_FVB/SHPC32.fastq.qt --plaintext /Xnfs/lbmcdb/Semon_team/data/SequencesLukeDec2016/Sequences/SequencesDUHIFVB/SHPC32.fastq"
+}
