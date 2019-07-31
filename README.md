@@ -14,4 +14,6 @@ Reads were then mapped to the mouse genome using Kallisto ((Bray et al., 2016), 
 
 The R code allows to reproduce differential analysis between strains and between reference sequence (allowing to retrieve mapping artifacts) : RNASeq_DUHiFVB_Mapping.R  
 
-This will automatically load the mapping data (Mapping folder, for mapping on classical mouse genome : Quant_Mus, and for mapping on FVB genome strain : Quant_FVB).  The annotation of the files is in "sample.txt". CaracteristicsERCC.txt is necessary to  study ERCC spike ins. Annotations retrieved from Ensembl is in Biomart_GRCm38.p5.txt, with corresponding ID in FVB corresp_FVB.txt.
+This will automatically load the mapping data (Mapping folder, for mapping on classical mouse genome : Quant_Mus, and for mapping on FVB genome strain : Quant_FVB).  The annotation of the files is in "sample.txt". CaracteristicsERCC.txt is necessary to  study ERCC spike ins. Annotations retrieved from Ensembl is in Biomart_GRCm38.p5.txt, with corresponding ID in FVB Biomart_FVB_MGI.txt.
+
+The raw result file with DE genes found after removing genes that are affected by mapping differences is here: 	DESeqSameJSResults.txt. It contains expression levels for 15560 genes, with MGI names, overall basemean, results of DESeq comparison ~Jaw + Strain (3619 genes differ with padj < 0.05 between strains once the jaw effect is taken into account), and estimated basemean expression per sample (correspondance with the annotation of the sample to be found in samples.txt).
