@@ -154,42 +154,6 @@ abline(a=0, b=1, col="red")
 
 
 
-###### Analyse des genes DE #######################################################################################################################
-## Recuperation des genes DE
-DEmapMus <- rownames(txiMusCounts)[DESeqMUSStrainResults$padj < 0.05]
-DEmapMus <- DEmapMus[!is.na(DEmapMus)]
-
-DEmapFVB <- rownames(txiFVBCounts)[DESeqFVBStrainResults$padj < 0.05]
-DEmapFVB <- DEmapFVB[!is.na(DEmapFVB)]
-
-
-
-## Genes DE en commun pour les deux mapping
-outersect <- function(x, y) {
-     sort(c(setdiff(x, y),
-            setdiff(y, x)))  }
-
-DEAll <- unique(rbind(matrix(DEmapMus), matrix(DEmapFVB)))
-MergeDEAll <- Merge[rownames(Merge)%in%DEAll,]
-plot(x=MergeDEAll$BaseMeanMus, y=MergeDEAll$BaseMeanFVB, log="xy", xlab="log(Base mean) mapping on C57", ylab="log(Base mean) mapping on FVB", main="All DE genes expression")
-abline(a=0, b=1, col="red")
-lm(log(MergeDEAll$BaseMeanFVB) ~ log(MergeDEAll$BaseMeanMus))
-
-DEcommon <- matrix(intersect(DEmapMus,DEmapFVB))
-MergeDEcommon <- Merge[rownames(Merge)%in%DEcommon,]
-plot(x=MergeDEcommon$BaseMeanMus, y=MergeDEcommon$BaseMeanFVB, log="xy", xlab="log(Base mean) mapping on C57", ylab="log(Base mean) mapping on FVB", main="Common DE genes expression")
-#idx <- identify(MergeDE$BaseMeanMus, MergeDE$BaseMeanFVB)
-abline(a=0, b=1, col="red")
-summary(lm(log(MergeDEcommon$BaseMeanFVB) ~ log(MergeDEcommon$BaseMeanMus)))
-
-DENoncommon <- matrix(outersect(DEmapMus,DEmapFVB))
-MergeDENoncommon <- Merge[rownames(Merge)%in%DENoncommon,]
-plot(x=MergeDENoncommon$BaseMeanMus, y=MergeDENoncommon$BaseMeanFVB, log="xy", xlab="log(Base mean) mapping on C57", ylab="log(Base mean) mapping on FVB", main="Non Common DE genes expression")
-abline(a=0, b=1, col="red")
-lm(log(MergeDENoncommon$BaseMeanFVB) ~ log(MergeDENoncommon$BaseMeanMus))
-
-
-
 
 ###### Spike-ins counts are rather well correlated with expected concentrations  #############################################################################################################################
 ##  baseMean
@@ -250,12 +214,21 @@ ddsSameJaw <- DESeqDataSetFromMatrix(txiSameCounts, colData = samples, design = 
 DESeqSameJaw <- DESeq(ddsSameJaw)
 DESeqSameJawResults <- results(DESeqSameJaw)
 table(DESeqSameJawResults$padj < 0.05)
-# genes differ between jaws once the strain effect is taken into account
+# 1612 genes differ between jaws once the strain effect is taken into account
+
+ddsSameJS <- DESeqDataSetFromMatrix(txiSameCounts, colData = samples, design = ~ Jaw + Strain)
+DESeqSameJS <- DESeq(ddsSameJS)
+DESeqSameJSResults <- results(DESeqSameJS)
+table(DESeqSameJSResults$padj < 0.05)
+# 3619 genes differ between strains once the jaw effect is taken into account
 
 write.table(DESeqSameJawResults,file="DESeqSameJawResults.txt",sep="\t",col.names=T,row.names=T,quote=F)
+write.table(DESeqSameJSResults,file="DESeqSameStrainResults.txt",sep="\t",col.names=T,row.names=T,quote=F)
 
-write.table(DESeqSameStrainResults,file="DESeqSameStrainResults.txt",sep="\t",col.names=T,row.names=T,quote=F)
+bm=counts(DESeqSameJS,norm=T)
+bm2=merge(DESeqSameJSResults,bm,by.x=0,by.y=0)
+write.table(bm2,file="DESeqSameJSResults.txt",sep="\t",col.names=T,quote=F,row.names=F)
 
 
 list=c("Axin2", "Kremen1", "Osr2", "Sfrp2","Spry2","Sostdc1")
-DESeqSameStrainResults[list,]
+DESeqSameJSResults[list,]
