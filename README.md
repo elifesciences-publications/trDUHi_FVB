@@ -1,5 +1,6 @@
 # trDUHi_FVB
 
+Code related to Hayden et al, 2020. https://doi.org/10.7554/eLife.50103
 
 ### Description of the repository
 
